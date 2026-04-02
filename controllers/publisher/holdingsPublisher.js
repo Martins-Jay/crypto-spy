@@ -12,9 +12,9 @@ class HoldingsPublisher {
       if (!targetEl) return;
 
       const action = targetEl.dataset.action;
-      const cardID = targetEl.dataset.id;
+      const holdingId = targetEl.dataset.id;
 
-      publish(this._channel, { action, cardID });
+      publish(this._channel, { action, holdingId });
     });
   }
 }

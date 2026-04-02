@@ -26,6 +26,9 @@ class HoldingsDataController {
 
       // ---- Feedback ----
       alert('Holding added successfully!');
+
+      // Refresh the holdings view
+      await this.loadHoldings(user.uid);
     } catch (error) {
       console.error('Error saving holding: ', error);
       alert(error.message);
@@ -36,14 +39,26 @@ class HoldingsDataController {
     const holdings = await holdingModel.fetchHoldings(userUid);
 
     holdingsView.loadCards(holdings); // send data to the view
-
-    holdingsPanelView.getHoldings(holdings); // send data to addHoldingsView
   }
 
-  _handleHoldingsActions({ action, cardID }) {
+  async handleHoldingsActions({ action, holdingId }) {
+    const user = await auth.currentUser;
+
     const actionMapObj = {
-      'delete-holding': () => {
-        console.log('Deleting...');
+      'delete-holding': async () => {
+        try {
+          console.log('Deleting...');
+
+          if (!user) return;
+
+          await holdingModel.deleteHolding(user.uid, holdingId);
+
+          const cardEl = document.querySelector(`[data-id="${holdingId}"]`);
+          if (cardEl) cardEl.remove();
+
+          // Refresh holdings from Firestore
+          await this.loadHoldings(user.uid);
+        } catch (error) {}
       },
     };
 
@@ -53,7 +68,7 @@ class HoldingsDataController {
   }
 
   _initSubscriber() {
-    subscribe('Holdings:btn-clicked', this._handleHoldingsActions);
+    subscribe('Holdings:btn-clicked', this.handleHoldingsActions);
   }
 
   init() {

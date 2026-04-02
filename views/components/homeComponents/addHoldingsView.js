@@ -17,14 +17,14 @@ class HoldingsPanelView {
     })
   }
 
-  async loadHoldings() {
-     holdingsView.showSkeletons()
+  // async loadHoldings() {
+  //    holdingsView.showSkeletons()
 
-     const holdings = await holdingModel.fetchHoldings(this.user.uid)
-     this.holdings = holdings;
+  //    const holdings = await holdingModel.fetchHoldings(this.user.uid)
+  //    this.holdings = holdings;
 
-     holdingsView.loadCards(holdings)
-  }
+  //    holdingsView.loadCards(holdings)
+  // }
 
   toggleVisibility() {
     this.bottomNav = document.getElementById('bottom-nav');
@@ -32,8 +32,6 @@ class HoldingsPanelView {
 
     // Check if panel is currently hidden
     const isPanelHidden = panel.classList.contains('translate-x-full');
-
-    console.log(this.holdings);
 
     // Toggle panel
     panel.classList.toggle('translate-x-full');
@@ -45,9 +43,7 @@ class HoldingsPanelView {
       this._resetForm();
     }, 500);
 
-    console.log(this.user, this.holdings);
     this.init()
-    this.loadHoldings()
   }
 
   _resetForm() {
@@ -79,13 +75,6 @@ class HoldingsPanelView {
       callback(formData);
     });
   }
-
-
-  // onDelete() {
-  //   document.addEventListener('click', function(e) {
-      
-  //   })
-  // }
 
   handleOutsideClicks(inputEl, suggestionBox) {
     document.addEventListener('click', (e) => {

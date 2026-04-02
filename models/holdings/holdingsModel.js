@@ -3,6 +3,8 @@ import {
   collection,
   addDoc,
   getDocs,
+  doc,
+  deleteDoc,
 } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
 
 const db = getFirestore();
@@ -24,9 +26,17 @@ class HoldingModel {
     return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
   }
 
-  // async deleteHolding(userId, holdingId) {
-  //   try 
-  // }
+  async deleteHolding(userId, holdingId) {
+    try {
+      const docRef = doc(db, 'users', userId, 'holdings', holdingId);
+
+      await deleteDoc(docRef);
+      console.log('deleted successfully');
+    } catch (error) {
+      console.log('error message:', error);
+      throw error
+    }
+  }
 }
 
 export const holdingModel = new HoldingModel();

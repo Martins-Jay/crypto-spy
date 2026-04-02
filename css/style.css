@@ -2527,12 +2527,6 @@ input.input-style:-webkit-autofill {
     padding: 1.25rem;
   }
 
-  @media (min-width: 768px){
-    .md\:md\:p-10{
-      padding: 2.5rem;
-    }
-  }
-
   .md\:px-10{
     padding-left: 2.5rem;
     padding-right: 2.5rem;

@@ -15,7 +15,7 @@ class HoldingsPanel {
   async initExchangeAutoComplete() {
     // Load exchanges once on app start
     this.exchanges = await this.marketModel.loadExchanges();
-    console.log(this.exchanges);
+
 
     holdingsPanelView.initExchangeAutoComplete((userValue) => {
       const enteredValueToLower = userValue.toLowerCase();
@@ -31,7 +31,6 @@ class HoldingsPanel {
   async initCoinAutoComplete() {
     // load Binance coin once
     this.coinList = await this.marketModel.loadBinanceCoins();
-    console.log(this.coinList);
 
     holdingsPanelView.initCoinAutocomplete((userEnteredSymbol) => {
       return this.coinList
