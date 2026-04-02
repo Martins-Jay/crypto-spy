@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* create reusable class */
+@layer components {
+  .input-title-style {
+    @apply block text-sm text-gray-300 light:text-appBg-black mb-1;
+  }
+
+  .input-style {
+    @apply w-full text-white bg-appBg lg:bg-neutral-800 light:bg-appBg-white light:placeholder-textBase-muted light:text-textBase-darkGray border border-gray-500 placeholder-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:border-brand transition;
+  }
+
+  .holdings-input-style {
+    @apply w-full p-2 text-xs text-white placeholder-textBase-darkGray bg-menuCard-glass lg:bg-neutral-800 light:bg-appBg-white light:border-textBase-darkGray light:placeholder-textBase-muted light:text-appBg-black border border-menuCard-glass rounded-md focus:outline-none focus:border-brand light:focus:border-brand transition lg:px-2 lg:py-3 lg:placeholder:text-sm;
+  }
+
+  /* Autofill overrides - high specificity */
+  input.input-style:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px #171717 inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+}
+
+@layer components {
+  /* Hide scrollbar but keep scrolling enabled */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; /* Internet Explorer and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
+@layer components {
+  .errorMsg-style {
+    @apply text-textBase-error text-[12px];
+  }
+}
+
+@layer components {
+  .svg-icon-border {
+    @apply flex w-10 h-10 items-center justify-center rounded-full shadow-2xl border-iconBorder-subtle focus:outline-none light:border-border-Light;
+  }
+}
+
+@layer components {
+  .menu-overlay-style {
+    @apply flex-col justify-between fixed top-0 right-0 h-screen w-full px-5 py-4 bg-black text-light transform transition-transform duration-[500ms] ease-[cubic-bezier(0.77,0,0.175,1)] delay-100 overflow-y-auto;
+  }
+}
+
+@layer components {
+  .overlay-style {
+    @apply absolute inset-0 bg-black bg-opacity-90 transition-opacity duration-500 ease-[cubic-bezier(0.77,0,0.175,1)];
+  }
+}
+
+
+@layer base {
+  input:-webkit-autofill {
+    transition: background-color 9999s ease-in-out 0s;
+    -webkit-text-fill-color: #ffffff !important;
+    background-color: transparent !important;
+    caret-color: white;
+    outline: none !important;
+    box-shadow: 0 0 0px 1000px #1f2937 inset !important; /* simulate bg-dark */
+  }
+}
+/* Hamburger styling for medium screen */
+.hamburger {
+  position: relative;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  transition: all 0.25s;
+}
+
+.hamburger-top,
+.hamburger-middle,
+.hamburger-bottom {
+  position: absolute;
+  width: 16px;
+  height: 1.5px;
+  left: 0; /* All 3 positioned to the left */
+  top: 25%;
+  background: #fff;
+  transform: rotate(0);
+  transition: all 0.5s;
+}
+
+.hamburger-middle {
+  transform: translateY(7px);
+}
+
+.hamburger-bottom {
+  transform: translateY(14px);
+}
+
+.open {
+  transform: rotate(90deg);
+  transform: translateY(0px);
+}
+
+.open .hamburger-top {
+  transform: rotate(45deg) translateY(6px) translateX(6px);
+}
+
+.open .hamburger-middle {
+  display: none;
+}
+
+.open .hamburger-bottom {
+  transform: rotate(-45deg) translateY(6px) translateX(-6px);
+}

@@ -1,0 +1,1001 @@
+<!DOCTYPE html><html lang="en" class="h-full w-full"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <title>CryptoSpy</title>
+
+    <!-- Tailwind CSS build output -->
+    <link rel="stylesheet" href="/cryptoSpy_mod.b2625c6b.css">
+
+    <!-- Font Awesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Preconnect for Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&amp;display=swap" rel="stylesheet">
+    <!-- Google Fonts: Space Grotesk -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet">
+    <!-- Google Fonts: Rubik -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&amp;display=swap" rel="stylesheet">
+    <!-- Google Fonts: Spectral -->
+    <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&amp;display=swap" rel="stylesheet">
+    <!-- Google Fonts: Tagesschrift -->
+    <link href="https://fonts.googleapis.com/css2?family=Tagesschrift&amp;display=swap" rel="stylesheet">
+
+    <script type="module" src="/cryptoSpy_mod.8e1b5cb5.js" defer=""></script>
+  </head>
+
+  <body class="flex flex-col h-full w-full bg-brand-body text-white light:bg-appBg-white light:text-textBase-textColor dark:bg-black dark:text-white md:bg-brand-body lg:bg-brand-body">
+    <!-- Loader overlay (hidden until active) -->
+    <div id="loader" class="fixed flex items-center justify-center bg-appBg light:bg-appBg-white dark:bg-appBg-black inset-0 backdrop-blur-md z-50">
+      <!-- Loading spinner with center eye icon -->
+      <div class="relative w-12 h-12">
+        <!-- Rotating border spinner -->
+        <div class="absolute inset-0 border-[4px] rounded-full border-t-transparent border-b-transparent border-l-brand-light border-r-brand-light animate-spin"></div>
+
+        <!-- Static center eye icon -->
+        <use xlink:href="#icon-eye"></use>
+      </div>
+    </div>
+
+    <!-- Authentication screen -->
+    <section class="hidden flex items-center justify-center w-full h-screen p-4" id="auth-section">
+      <!-- Auth card: login & signup forms -->
+      <div class="w-full max-w-md bg-authBg rounded-2xl shadow-2xl py-10 px-6 mb-16 space-y-4 md:mb-0 md:max-w-lg md:py-20 md:px-8">
+        <!-- App branding -->
+        <h2 class="text-center text-3xl text-primary">
+          <span class="text-brand font-semibold">Crypto</span>
+          <span class="text-textBase-darkGray font-black">Spy</span>
+        </h2>
+        <p id="dynamic-center-text" class="text-center text-md text-gray-400 light:text-textBase-darkGray">
+          Login to Get Started
+        </p>
+
+        <!-- Login form -->
+        <form action="" id="login-form" class="space-y-6 md:space-y-8">
+          <!-- Email field -->
+          <div>
+            <label for="email" class="input-title-style">Email</label>
+
+            <div class="relative">
+              <input type="text" id="login-email-input" placeholder="User@example.com" class="input-style" data-name="email">
+            </div>
+
+            <!-- Email error message -->
+            <div id="login-email-error-container" class="flex items-center mt-1 space-x-2 hidden" data-error-box="email">
+              <!-- Error icon -->
+              <div id="icon-container" class="ml-2">
+                <svg class="w-3 h-3 text-textBase-error" stroke="currentColor" fill="none" data-error-icon="email">
+                  <use xlink:href="/icons.bd806c78.svg#icon-error"></use>
+                </svg>
+              </div>
+
+              <!-- Error text -->
+              <p id="login-email-error" class="errorMsg-style" data-error-text="email"></p>
+            </div>
+          </div>
+
+          <!-- Password field -->
+          <div>
+            <label for="password" class="input-title-style">Password</label>
+
+            <div class="relative">
+              <input type="password" id="login-password-input" placeholder="Enter your password" class="password-input input-style" data-name="password">
+
+              <!-- Password visibility toggle :modified-->
+              <svg class="toggle-password-btn absolute w-5 h-5 text-gray-600 top-1/4 right-4">
+                <use class="icon-eye-closed" xlink:href="#icon-eye-closed"></use>
+              </svg>
+            </div>
+
+            <!-- Password error message -->
+            <div id="login-password-error-container" class="flex items-center mt-1 space-x-2 hidden" data-error-box="password">
+              <!-- Error icon -->
+              <div id="icon-container" class="ml-2">
+                <svg class="w-3 h-3 text-textBase-error" stroke="currentColor" fill="none" data-error-icon="email">
+                  <use xlink:href="/icons.bd806c78.svg#icon-error"></use>
+                </svg>
+              </div>
+
+              <!-- Error text -->
+              <p id="login-pw-error" class="errorMsg-style" data-error-text="password"></p>
+            </div>
+          </div>
+
+          <!-- Login button -->
+          <div>
+            <button type="submit" class="w-full font-semibold light:text-appBg-white bg-brand py-2.5 rounded-lg tracking-wider transition-colors duration-150 mt-4 cursor:pointer lg:hover:bg-brand-light">
+              Login
+            </button>
+          </div>
+
+          <!-- Password recovery & signup switch -->
+          <div class="flex items-center justify-between">
+            <!-- Forgot password -->
+            <button class="block text-sm text-center text-brand-light cursor-pointer" onclick="alert('This is a frontend-only demo. Please re-register if needed.')">
+              Forgot Password?
+            </button>
+
+            <!-- Signup link -->
+            <div class="text-sm text-center text-textBase-secondary light:text-textBase-darkGray">
+              New user?
+              <span id="toggle-signup" class="text-sm text-brand-light cursor-pointer">
+                Sign up
+              </span>
+            </div>
+          </div>
+        </form>
+
+        <!-- Signup form -->
+        <form action="" id="signup-form" class="space-y-6 hidden">
+          <!-- First name field -->
+          <div class="name-input">
+            <label for="text" class="input-title-style">First Name</label>
+
+            <input type="text" id="signup-name-input" class="input-style" placeholder="First Name" data-name="name">
+
+            <!-- Name error message -->
+            <div id="signup-name-error-container" class="flex items-center mt-1 space-x-2 hidden" data-error-box="name">
+              <!-- Error icon -->
+              <div id="icon-container" class="ml-2">
+                <svg class="w-3 h-3 text-textBase-error" stroke="currentColor" fill="none" data-error-icon="name">
+                  <use xlink:href="/icons.bd806c78.svg#icon-error"></use>
+                </svg>
+              </div>
+
+              <!-- Error text -->
+              <p id="signup-name-error" class="errorMsg-style" data-error-text="name"></p>
+            </div>
+          </div>
+
+          <!-- Email field -->
+          <div>
+            <label for="email" class="input-title-style">Email</label>
+
+            <input type="text" id="signup-email-input" placeholder="Example@mail.com" class="input-style" data-name="email">
+
+            <!-- Email error message -->
+            <div id="signup-email-error-container" class="flex items-center mt-0.5 space-x-2 hidden" data-error-box="email">
+              <!-- Error icon -->
+              <div id="icon-container" class="ml-2">
+                <svg class="w-3 h-3 text-textBase-error" stroke="currentColor" fill="none" data-error-icon="email">
+                  <use xlink:href="/icons.bd806c78.svg#icon-error"></use>
+                </svg>
+              </div>
+
+              <!-- Error text -->
+              <p id="signup-email-error" class="errorMsg-style" data-error-text="email"></p>
+            </div>
+          </div>
+
+          <!-- Password field -->
+          <div>
+            <label for="password" class="input-title-style">Password</label>
+
+            <div class="relative">
+              <input type="password" id="signup-password-input" class="password-input input-style" placeholder="Enter your password" data-name="password">
+
+              <!-- Password visibility toggle -->
+              <svg class="toggle-password-btn absolute w-5 h-5 text-gray-600 top-1/4 right-4">
+                <use class="icon-eye-closed" xlink:href="#icon-eye-closed"></use>
+              </svg>
+            </div>
+
+            <!-- Password error message -->
+            <div id="signup-password-error-container" class="flex items-center mt-0.5 space-x-2 hidden" data-error-box="password">
+              <!-- Error icon -->
+              <div id="icon-container" class="ml-2">
+                <svg class="w-3 h-3 text-textBase-error" stroke="currentColor" fill="none" data-error-icon="email">
+                  <use xlink:href="/icons.bd806c78.svg#icon-error"></use>
+                </svg>
+              </div>
+
+              <!-- Error text -->
+              <p id="signup-password-error" class="errorMsg-style" data-error-text="password"></p>
+            </div>
+          </div>
+
+          <!-- Confirm password field -->
+          <div>
+            <label for="password" class="input-title-style">
+              Confirm Password
+            </label>
+
+            <div class="relative">
+              <input type="password" id="confirm-password" class="password-input input-style" placeholder="Enter your password" data-name="password--check">
+
+              <!-- Password visibility toggle -->
+              <svg class="toggle-password-btn absolute w-5 h-5 text-gray-600 top-1/4 right-4">
+                <use class="icon-eye-closed" xlink:href="#icon-eye-closed"></use>
+              </svg>
+            </div>
+
+            <!-- Confirm password error message -->
+            <div id="signup-confirm-error-container" class="flex items-center mt-0.5 space-x-2 hidden" data-error-box="password--check">
+              <div id="icon-container" class="ml-2"></div>
+
+              <p id="signup-confirm-password-error" class="text-textBase-error text-sm" data-error-text="password--check"></p>
+            </div>
+          </div>
+
+          <!-- Signup button -->
+          <div>
+            <button type="submit" class="w-full font-semibold bg-brand light:text-appBg-white lg:hover:bg-brand-light py-2.5 rounded-lg transition tracking-wider mt-4">
+              Sign Up
+            </button>
+          </div>
+
+          <!-- Switch to login link -->
+          <div class="flex item-center justify-center">
+            <div class="text-sm text-center text-textBase-secondary light:text-textBase-darkGray">
+              Already a member?
+              <span id="toggle-login" class="text-sm text-brand-light cursor-pointer hidden">
+                Sign In
+              </span>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Dashboard main section -->
+    <section data-screen="desktop" id="dashboard-section" class="hidden px-6 md:px-10">
+      <header data-screen="desktop" id="header" class="flex items-center justify-between py-4 md:py-6">
+        <!-- Mobile menu button (grid icon) -->
+        <button id="menu-toggle-btn" class="md:hidden">
+          <!-- Grid menu icon -->
+          <svg class="w-7 h-7 text-light light:text-appBg-black">
+            <use xlink:href="/icons.bd806c78.svg#grid-menu"></use>
+          </svg>
+        </button>
+
+        <!-- Left side: logo + left menu action btns(lg screens only) -->
+        <div class="hidden md:flex items-center justify-center space-x-4">
+          <!-- Logo -->
+          <div id="header-logo-wrapper" class="hidden md:flex items-baseline">
+            <span class="font-black text-2xl text-brand">Crypto</span>
+            <span id="cryptoSpy-logo" class="font-black text-brand text-2xl">
+              Spy
+            </span>
+          </div>
+
+          <!-- Injection point #1: desktop nav menu (e.g., Markets, News) -->
+          <div id="desktop-menu-container" class="hidden items-center"></div>
+        </div>
+
+        <!-- Right: Quick action icons (Visible for all screen sizes) -->
+        <div class="flex space-x-2 items-center">
+          <!-- Search button -->
+          <button class="svg-icon-border md:border-0">
+            <svg class="w-6 h-6 md:w-5 md:h-5">
+              <use xlink:href="#search-icon"></use>
+            </svg>
+          </button>
+
+          <!-- Notifications button -->
+          <button class="svg-icon-border md:border-0">
+            <svg class="w-6 h-6 md:w-5 md:h-5">
+              <use xlink:href="#bell"></use>
+            </svg>
+          </button>
+
+          <!-- Favorites button -->
+          <button class="svg-icon-border md:border-0">
+            <svg class="w-6 h-6 md:w-5 md:h-5">
+              <use xlink:href="#favorite"></use>
+            </svg>
+          </button>
+
+          <!-- Medium screen: hamburger menu -->
+          <div id="medium-toggle-btn" class="hidden md:flex lg:hidden" aria-label="open menium settings">
+            <button id="medium-menu-btn" type="button" class="flex items-center hamburger z-40 focus:outline-none mx-1">
+              <span class="hamburger-top light:bg-appBg-black"></span>
+              <span class="hamburger-middle light:bg-appBg-black"></span>
+              <span class="hamburger-bottom light:bg-appBg-black"></span>
+            </button>
+          </div>
+
+          <!-- Injection point #1: profile button + dropdown (desktop) -->
+          <div class="relative hidden lg:flex">
+            <!-- Nav profile icon -->
+            <button data-action="profile-dropdown" id="desktop-profile-icon" class="dropdown-btn svg-icon-border md:border-0">
+              <!-- User icon -->
+              <svg class="w-5 h-5">
+                <use xlink:href="#icon-user-circle"></use>
+              </svg>
+            </button>
+
+            <!-- Desktop profile dropdown container-->
+            <div id="nav-profile-dropdown" class="dropdown-content absolute right-0 top-full opacity-0 pointer-events-none transition-all duration-200 easee-in-out"></div>
+          </div>
+
+          <!-- Injection point #2: settings button + dropdown (desktop) -->
+          <div class="relative hidden lg:flex">
+            <!-- Nav settings icon -->
+            <button data-action="settings-dropdown" id="desktop-settings-icon" class="dropdown-btn svg-icon-border md:border-0">
+              <!-- Settings icon -->
+              <svg class="w-5 h-5">
+                <use xlink:href="#icon-gear"></use>
+              </svg>
+            </button>
+
+            <!-- Desktop settings dropdown container-->
+            <div data-screen="desktop" id="nav-settings-dropdown" class="dropdown-content absolute right-0 top-full max-h-96 opacity-0 pointer-events-none transition-all duration-200 easee-in-out"></div>
+          </div>
+        </div>
+      </header>
+    </section>
+
+    <!-- Dashboard header section -->
+    <section id="dashboard-header" class="hidden pt-2 px-6 md:px-10">
+      <div id="dashboard-header__container" class="flex items-center justify-between rounded-2xl">
+        <div class="w-full flex flex-col space-y-4 md:space-y-4">
+          <!--  Greeting area  -->
+          <div id="greeting-container">
+            <!-- Greeting Message (Static placeholder — will be replaced by JS) -->
+          </div>
+
+          <!-- Portfolio summary  -->
+          <div id="portfolio-summary" class="flex flex-col justify-between mt-4 space-y-1"></div>
+
+          <!-- PROFIT / LOSS AREA  -->
+          <div id="portfolio-pnl" class="flex flex-col space-y-1"></div>
+        </div>
+
+        <!-- Add holdings panel (initially offscreen template to be injected on page load -->
+        <div id="add-holdings-panel" class="menu-overlay-style h-full bg-brand-body z-50 light:bg-appBg-white dark:bg-appBg-black translate-x-full"></div>
+      </div>
+    </section>
+
+    <section id="market-section" class="flex flex-col w-full px-6 py-6 md:px-10 md:py-10 lg:flex-row lg:justify-center lg:space-x-10 lg:px-10">
+      <!-- Intro section -->
+      <div id="intro-container" class="hidden md:flex lg:flex items-center px-6 space-x-4 md:pb-4 lg:w-3/4"></div>
+
+      <!-- Market section -->
+      <div id="market-container" class="px-4 py-3 space-y-2 rounded-lg shadow-md bg-menuCard-glass light:bg-menuCard-menuLightBg md:px-6 md:py-5 md:rounded-xl md:shadow-md lg:px-6 lg:py-8 lg:space-y-4">
+        <!-- Category Tabs -->
+        <div id="market-tabs" class="flex text-md space-x-6 overflow-x-auto whitespace-nowrap no-scrollbar"></div>
+
+        <!-- Market list -->
+        <div id="market-list" class="flex flex-col space-y-3 lg:space-y-4">
+          <!-- Market type switch -->
+          <div id="market-type-switch" class="flex items-center text-sm space-x-2">
+            <button class="market-type-btn active" data-type="spot">
+              Spot
+            </button>
+            <button class="market-type-btn text-textBase-darkGray hidden" data-type="futures">
+              Futures
+            </button>
+          </div>
+
+          <!-- Market grid + list (unified container) -->
+          <div id="market-table" class="space-y-3">
+            <!-- Header -->
+            <div class="grid grid-cols-3 text-xs text-textBase-darkGray">
+              <span class="col-span-1">Name</span>
+              <span class="text-right">Last Price</span>
+              <span class="text-right">24h chg%</span>
+            </div>
+
+            <!-- List Body (same grid layout as header) -->
+            <div id="market-list-container" class="flex flex-col space-y-2"></div>
+
+            <!-- View more btn section (just btm slide pannel is not inside) -->
+            <div id="view-more-btn-wrapper" class="flex items-center justify-center">
+              <!-- btn element -->
+              <button class="view-more-btn text-textBase-darkGray" data-action="show-more-coins">
+                View more
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- View more panel (initially offscreen) -->
+      <div id="view-more-panel" class="menu-overlay-style bg-brand-body translate-x-full light:bg-appBg-white light:text-appBg dark:bg-appBg-black">
+        <!-- panel container -->
+        <div id="view-more-panel-container" class="flex flex-col space-y-6">
+          <!-- view more nav bar wrapper -->
+          <div id="view-more-navbar-wrapper" class="flex">
+            <!-- Return arrow -->
+            <div data-action="return-home" id="arrow-left-icon" class="cursor-pointer">
+              <svg class="w-6 h-6 text-light light:text-appBg-black">
+                <use xlink:href="#icon-arrow-left"></use>
+              </svg>
+            </div>
+
+            <!-- Panel header -->
+            <div class="flex items-center justify-center w-full">
+              <div class="flex items-center justify-center text-lg font-bold">
+                Rankings
+              </div>
+            </div>
+          </div>
+
+          <!-- Category Tabs -->
+          <div id="view-more-tabs" class="flex text-sm space-x-6 overflow-x-auto whitespace-nowrap no-scrollbar"></div>
+
+          <div id="market-list" class="flex flex-col space-y-3 lg:space-y-4">
+            <!-- Market type switch -->
+            <div id="market-type-switch" class="flex items-center text-sm space-x-2">
+              <button class="market-type-btn active" data-type="spot">
+                Spot
+              </button>
+              <button class="market-type-btn text-textBase-darkGray hidden" data-type="futures">
+                Futures
+              </button>
+            </div>
+
+            <!-- Market grid + list (unified container) -->
+            <div id="view-more-market-table" class="space-y-3">
+              <!-- Header -->
+              <div class="grid grid-cols-3 text-xs text-textBase-darkGray">
+                <span class="col-span-1">Name</span>
+                <span class="text-right">Last Price</span>
+                <span class="text-right">24h chg%</span>
+              </div>
+
+              <!-- List Body (same grid layout as header) -->
+              <div id="view-more-list-container" class="flex flex-col space-y-2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- === Slide-out Container Panels ==== -->
+
+    <!-- Mobile menu -->
+    <aside id="mobile-menu-container" class="fixed hidden inset-0 z-50 md:hidden">
+      <!-- Overlay background -->
+      <!-- <div
+          id="mobile-menu-overlay"
+          class="absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300"
+        ></div> -->
+
+      <!-- Mobile menu sliding panel -->
+      <div data-screen="mobile" id="mobile-menu-content" class="menu-overlay-style translate-x-full bg-brand-body light:bg-appBg-white dark:bg-appBg-black">
+        <!-- Menu content container (JS will inject template here) -->
+      </div>
+    </aside>
+
+    <!-- Settings panel (initially offscreen) -->
+    <aside id="mobile-settings-container" class="fixed inset-0 z-50 hidden md:hidden">
+      <!-- Overlay background -->
+      <!-- <div
+          id="mobile-settings-overlay"
+          class="absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300"
+        ></div> -->
+
+      <!-- Mobile settings sliding panel -->
+      <div data-screen="mobile" id="mobile-settings-content" class="menu-overlay-style bg-brand-body translate-x-full dark:bg-black light:bg-appBg-white light:text-appBg-black"></div>
+
+      <!-- Mode & Theme (initially offscreen) -->
+      <div data-screen="mobile" id="mode-theme-panel" class="menu-overlay-style bg-brand-body translate-x-full dark:bg-black dark:text-appBg-white light:bg-appBg-white light:text-appBg-black"></div>
+
+      <!-- Fonts & Typography (initially offscreen) -->
+      <div data-screen="mobile" id="fonts-panel" class="menu-overlay-style bg-brand-body translate-x-full dark:bg-black dark:text-appBg-white light:bg-appBg-white light:text-appBg-black"></div>
+    </aside>
+
+    <!-- Medium menu (slides in from the right, 60% width) -->
+    <aside id="medium-menu-container" class="lg:hidden invisible">
+      <!-- Overlay -->
+      <div id="medium-menu-overlay" class="overlay-style md:bg-black/50 md:backdrop-blur-sm md:opacity-100"></div>
+
+      <!-- Medium menu sliding panel -->
+      <div data-screen="medium" id="medium-menu-content" class="flex flex-col fixed h-full w-[45%] top-0 right-0 bg-neutral-800 light:bg-appBg-white transition-all duration-[300ms] opacity-0 invisible ease-in-out lg:hidden"></div>
+    </aside>
+
+    <!-- == Templates (single source of truth for content) == -->
+
+    <!-- Mobile slide out: Menu -->
+    <template id="menu-template">
+      <div id="menu-wrapper" class="flex flex-col justify-between h-full md:px-4 md:pt-6 md:h-auto lg:light:bg-appBg-white lg:pt-0 lg:bg-menuBg-dropdown lg:rounded-lg lg:shadow-lg border-1 border-black z-40">
+        <!-- Top section -->
+        <div class="flex flex-col">
+          <div class="flex flex-col align-center justify-center space-y-8 md:space-y-0 md:pt-6 lg:py-4">
+            <!-- Top section -->
+            <div class="flex items-center justify-between md:order-3">
+              <!-- Back arrow -->
+              <div data-action="return-home" id="arrow-left-icon" class="md:hidden">
+                <svg class="w-6 h-6 text-light light:text-appBg-black">
+                  <use xlink:href="#icon-arrow-left"></use>
+                </svg>
+              </div>
+
+              <!-- Top menu icons -->
+              <div class="flex space-x-4 md:space-x-0 md:pt-8 lg:pt-2">
+                <!-- Contact us icon -->
+                <a href="mailto:cryptospy@gmail.com?subject=Support%20Request&amp;body=Dear%20CryptoSpy%20Team%2C%0D%0A%0D%0A">
+                  <div id="contactUs-wrapper" class="flex md:flex-row md:items-baseline md:text-xs md:capitalize cursor-pointer md:space-x-2 lg:hidden">
+                    <div class="icon-user svg-icon-border md:w-auto md:h-auto md:border-0">
+                      <svg class="w-6 h-6 md:w-3.5 md:h-3.5 light:text-appBg-black">
+                        <use xlink:href="#icon-user"></use>
+                      </svg>
+                    </div>
+
+                    <div class="hidden md:flex text-md md:text-[15px] capitalize">
+                      Contact us
+                    </div>
+                  </div>
+                </a>
+
+                <!-- Settings icon -->
+                <div data-action="mobile-settings" class="settings-icon gear-icon svg-icon-border md:hidden cursor-pointer">
+                  <svg class="w-7 h-7 light:text-appBg-black">
+                    <use xlink:href="#icon-gear"></use>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Parent group 2: User profile info -->
+            <div class="flex flex-row items-center space-x-6 md:space-x-4 md:pb-4 md:order-1 lg:order-1">
+              <!-- Profile image -->
+              <div id="image-block" class="">
+                <!-- Outer gradient ring -->
+                <div id="user-image-gradient" class="w-14 h-14 rounded-full p-[1px] bg-gradient-to-tr from-brand via-transparent to-brand md:w-10 md:h-10 lg:p-0">
+                  <!-- Inner black background -->
+                  <div class="w-full h-full rounded-full p-[1px]">
+                    <!-- Actual image -->
+                    <img src="/user.fc0588ef.png" class="w-full h-full rounded-full object-cover" alt="user image">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Name & email -->
+              <div class="flex flex-col">
+                <!-- User name -->
+                <h1 id="user-name" class="user-name text-lg text-light font-bold md:text-[15px] light:text-appBg-black"></h1>
+                <!-- Mail & verification status -->
+                <div class="flex items-center justify-between space-x-4 lg:flex-col lg:items-start lg:space-x-0">
+                  <!-- email -->
+                  <span id="user-email" class="user-email text-xs text-gray-400 md:text-[10px]"></span>
+
+                  <!-- badge -->
+                  <div id="verified-status" class="flex items-center justify-center px-[7px] py-[3px] border-[2px] border-iconBorder-glass bg-brand-body rounded-full lg:hidden light:bg-appBg-black">
+                    <span class="text-yellow-600 text-[9px] md:text-[8px]">
+                      Not Verified
+                    </span>
+                  </div>
+                </div>
+
+                <!-- User ID -->
+                <span id="user-id" class="user-id text-xs text-gray-400 md:text-[10px] lg:hidd"></span>
+              </div>
+            </div>
+
+            <!-- Divider -->
+            <div id="menu-utility-container" class="flex border w-full rounded-full border-border-glass md:order-2 lg:order-2 space-y-10 lg:light:bg-gray-200"></div>
+
+            <!-- Parent group 3: Follow us container -->
+            <div class="flex items-center md:hidden">
+              <!-- Follow us card container -->
+              <div class="flex flex-col justify-between w-1/2 h-28 bg-menuCard-glass light:bg-menuCard-menuLightBg rounded-xl px-4 py-4 mr-4 md:hidden">
+                <div id="follow-us-title" class="text-sm font-bold light:text-textBase-darkGray">
+                  Stay in the Loop
+                </div>
+
+                <div class="flex items-center justify-between">
+                  <!-- Card container -->
+                  <div id="follow-us-subtitle" class="flex align-text-bottom text-xs text-gray-400">
+                    Follow Us
+                  </div>
+
+                  <!-- Outer wrapper with 2px padding-->
+                  <button data-action="card-right-arrow" class="test1 w-7 h-7 p-[2px] bg-rounded-full cursor-pointer">
+                    <!-- Inner -->
+                    <div class="flex items-center justify-center w-full h-full rounded-full bg-brand-body light:bg-appBg-white">
+                      <svg class="w-3 h-3 light:text-appBg-black">
+                        <use xlink:href="#icon-arrow-right"></use>
+                      </svg>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Socials wrapper -->
+              <div id="socials-wrapper" class="flex justify-between items-center max-w-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out">
+                <div id="" class="left-socials flex flex-col space-y-2 md:hidden">
+                  <!-- Container with 2px padding -->
+                  <button class="w-10 h-10 p-[2px] bg-iconBorder-visible rounded-full light:bg-border-Light">
+                    <!-- Inner -->
+                    <div class="flex items-center justify-center w-full h-full rounded-full bg-brand-body light:bg-appBg-white">
+                      <!-- Twitter/X icon -->
+                      <svg class="w-5 h-5 text-sky-500">
+                        <use xlink:href="#icon-twitter"></use>
+                      </svg>
+                    </div>
+                  </button>
+
+                  <!-- Container with 2px padding -->
+                  <button class="w-10 h-10 p-[2px] bg-iconBorder-visible rounded-full light:bg-border-Light">
+                    <!-- Inner -->
+                    <div class="flex items-center justify-center w-full h-full rounded-full bg-brand-body light:bg-appBg-white">
+                      <svg class="w-5 h-5 text-pink-500">
+                        <use xlink:href="#icon-instagram"></use>
+                      </svg>
+                    </div>
+                  </button>
+                </div>
+
+                <div id="" class="right-socials flex flex-col items-center md:hidden">
+                  <button class="flex">
+                    <!-- Outer wrapper with 2px padding -->
+                    <div class="flex items-center justify-center w-10 h-10 p-[2px] bg-iconBorder-visible rounded-full light:bg-border-Light">
+                      <!-- Inner -->
+                      <div class="flex items-center justify-center w-full h-full rounded-full bg-brand-body light:bg-appBg-white">
+                        <!-- LinkedIn icon -->
+                        <svg class="w-4 h-4 text-blue-600">
+                          <use xlink:href="#icon-linkedin"></use>
+                        </svg>
+                      </div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Logout (only for desktop)  -->
+            <div data-action="logout-for-large" class="logout-for-large hidden lg:flex items-center light:text-appBg-white lg:order-3 pt-8">
+              <div id="change-username-left-wrapper" class="flex items-center cursor-pointer md:space-x-2">
+                <div class="">
+                  <svg class="w-3.5 h-3.5 light:text-appBg-black">
+                    <use xlink:href="#icon-logout"></use>
+                  </svg>
+                </div>
+
+                <button class="md:text-[13px] light:text-appBg-black">
+                  Log out
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom -->
+        <div class="flex items-center w-full h-12 mb-20 px-4 border-2 border-border-glass bg-menuCard-glass light:border-border-glass light:bg-menuCard-menuLightBg rounded-xl md:hidden md:mb-0">
+          <h1 class="font-black text-brand">
+            Crypto
+            <span class="text-lg font-black text-textBase-muted">Spy</span>
+          </h1>
+        </div>
+      </div>
+    </template>
+
+    <!-- Settings slide out: Settings -->
+    <template id="settings-template">
+      <div id="settings-wrapper" class="flex flex-col h-full py-8 justify-between md:px-4 lg:light:bg-appBg-white lg:w-[280px] lg:bg-menuBg-dropdown lg:rounded-lg lg:shadow-lg border-1 border-black z-40" data-menu="">
+        <div class="flex flex-col">
+          <div class="flex flex-col space-y-5 md:hidden">
+            <!-- Back arrow -->
+            <div data-action="return-to-menu" id="arrow-left-icon" class="cursor-pointer">
+              <svg class="w-6 h-6 text-light light:text-appBg-black">
+                <use xlink:href="#icon-arrow-left"></use>
+              </svg>
+            </div>
+
+            <!-- Title: Settings -->
+            <div class="flex">
+              <h1 class="text-light text-[24px] font-bold light:text-appBg-black">
+                Settings
+              </h1>
+            </div>
+          </div>
+
+          <!-- Divider line -->
+          <div id="menu-utility-container" class="flex border w-full rounded-full border-border-glass mt-4 mb-2 md:hidden"></div>
+
+          <!-- Appearance group -->
+          <div class="flex flex-col justify-center md:mr-8 lg:mr-0">
+            <div class="flex mb-4 md:mb-0">
+              <!-- Title: Appearance -->
+              <h1 class="text-xs text-textBase-darkGray md:hidden">
+                Appearance
+              </h1>
+            </div>
+
+            <div class="flex flex-col text-sm space-y-8 md:space-y-4 md:text-xs md:mb-4 lg:space-y-3 lg:mb-3">
+              <button data-action="mode-theme">
+                <div class="flex flex-row justify-between items-center">
+                  <div id="mode-left-wrapper" class="flex md:flex-row md:items-center md:text-xs md:capitalize cursor-pointer md:space-x-2">
+                    <!-- Left icon -->
+                    <div class="hidden md:block lg:hidden">
+                      <svg class="w-3.5 h-3.5">
+                        <use xlink:href="#icon-theme-toggle"></use>
+                      </svg>
+                    </div>
+
+                    <!-- Title: Mode & Theme -->
+                    <div class="flex capitalize text-md md:text-[15px] lg:text-[13px]">
+                      mode &amp; theme
+                    </div>
+                  </div>
+
+                  <!-- Icon (Mobile)-->
+                  <div class="flex items-center justify-between space-x-2">
+                    <div id="active-theme-name" class="flex text-textBase-darkGray text-sm capitalize md:text-xs lg:text-[11px]"></div>
+
+                    <!-- Mobile right arrow -->
+                    <svg class="w-3 h-3 text-gray-400 md:hidden">
+                      <use href="#icon-arrow-right"></use>
+                    </svg>
+
+                    <!-- Medium down arrow -->
+                    <svg id="theme-accordion-arrow" class="w-3 h-3 text-gray-400 hidden md:flex transition-transform duration-300">
+                      <use href="#icon-chevron-down"></use>
+                    </svg>
+                  </div>
+                </div>
+              </button>
+
+              <!-- Mode accordion container (buttons injected inside) -->
+              <div id="menu-accordion-container" class="accordion-content hidden md:flex md:flex-col overflow-hidden transition-all duration-200 max-h-0 ease-in-out"></div>
+
+              <!-- Font & Typography -->
+              <button data-action="show-font-pannel" class="flex items-center justify-between md:text-xs">
+                <div id="font-left-wrapper" class="flex items-center md:flex-row cursor-pointer md:space-x-2">
+                  <!-- Left icon -->
+                  <div class="hidden md:block lg:hidden">
+                    <svg class="w-4 h-4">
+                      <use xlink:href="#icon-font-typo"></use>
+                    </svg>
+                  </div>
+
+                  <!-- Title: Font & Typography -->
+                  <div class="flex text-md md:text-[15px] capitalize lg:text-[13px]">
+                    font &amp; typography
+                  </div>
+                </div>
+
+                <!-- Icon -->
+                <div class="flex items-center justify-between space-x-2">
+                  <div id="active-font-name" class="flex text-textBase-darkGray text-sm md:text-xs lg:text-[11px] capitalize"></div>
+
+                  <svg class="w-3 h-3 text-gray-400 md:hidden">
+                    <use href="#icon-arrow-right"></use>
+                  </svg>
+
+                  <!-- Medium down arrow -->
+                  <svg id="font-accordion-arrow" class="w-3 h-3 text-gray-400 hidden md:flex transition-transform duration-300">
+                    <use href="#icon-chevron-down"></use>
+                  </svg>
+                </div>
+              </button>
+
+              <!-- Font accordion container  -->
+              <div id="medium-menu-font-accordion-container" class="accordion-content hidden md:flex md:flex-col overflow-hidden transition-all duration-200 max-h-0 ease-linear"></div>
+            </div>
+          </div>
+
+          <!-- Divider line -->
+          <div id="menu-utility-container" class="flex border w-full rounded-full border-border-glass mt-6 mb-2 md:hidden"></div>
+
+          <!-- Account group -->
+          <div class="flex flex-col md:text-xs">
+            <div class="flex mb-4 md:hidden">
+              <!-- Title: Account -->
+              <h1 class="text-xs text-textBase-darkGray">Account</h1>
+            </div>
+
+            <div class="flex flex-col space-y-8 text-sm md:text-xs md:space-y-8 lg:space-y-6">
+              <button class="flex items-center justify-between">
+                <div id="change-username-left-wrapper" class="flex items-center md:flex-row cursor-pointer md:space-x-2">
+                  <!-- Left icon -->
+                  <div class="hidden md:block lg:hidden">
+                    <svg class="w-4 h-4">
+                      <use xlink:href="#icon-user-text"></use>
+                    </svg>
+                  </div>
+
+                  <!-- Title: Change username -->
+                  <div class="flex text-md md:text-[15px] lg:text-[13px] capitalize">
+                    change username
+                  </div>
+                </div>
+
+                <!-- Right arrow icon -->
+                <svg class="w-3 h-3 text-gray-400 md:hidden">
+                  <use href="#icon-arrow-right"></use>
+                </svg>
+              </button>
+
+              <!-- Change Pw wrapper -->
+              <button id="changePW-wrapper" class="flex items-center justify-between">
+                <div id="change-pw-left-wrapper" class="flex items-center md:flex-row cursor-pointer md:space-x-2">
+                  <!-- Left icon -->
+                  <div class="hidden md:block lg:hidden">
+                    <svg class="w-4 h-4">
+                      <use xlink:href="#icon-change-password"></use>
+                    </svg>
+                  </div>
+
+                  <!-- Title: Change password -->
+                  <div id="changePW" class="flex text-md md:text-[15px] lg:text-[13px] capitalize">
+                    change password
+                  </div>
+                </div>
+
+                <!-- Right arrow icon -->
+                <svg class="w-3 h-3 text-gray-400 md:hidden">
+                  <use href="#icon-arrow-right"></use>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Logout -->
+        <div data-action="logout" class="logout flex items-center justify-center mb-16 py-2 border-2 rounded-xl border-iconBorder-subtle bg-brand capitalize md:mb-2 md:text-sm md:border-0 md:bg-inherit md:justify-start cursor-pointer light:border-border-Light light:text-appBg-white lg:hidden">
+          <div id="change-username-left-wrapper" class="flex items-center md:flex-row cursor-pointer md:space-x-2">
+            <div class="hidden md:block lg:hidden">
+              <svg class="w-4 h-4 light:text-appBg-black">
+                <use xlink:href="#icon-logout"></use>
+              </svg>
+            </div>
+            <button class="md:text-[15px] md:light:text-appBg-black">
+              Log out
+            </button>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- Mode & theme pannel -->
+    <template id="mode-theme-template">
+      <!-- Trigger: First element child. data-device is passed when rendering since this template will be reused across multiple screens -->
+      <div id="mode-theme-wrapper" class="flex flex-col h-full py-6 md:px-4" data-menu="">
+        <!-- Back icon & title -->
+        <div class="flex flex-col space-y-5 mb-6 md:hidden">
+          <!-- Back arrow -->
+          <div data-action="return-to-settings" id="arrow-left-icon" class="cursor-pointer">
+            <svg class="w-6 h-6 text-light light:text-appBg-black">
+              <use xlink:href="#icon-arrow-left"></use>
+            </svg>
+          </div>
+
+          <!-- Title: Mode & Themes -->
+          <div class="flex">
+            <h1 class="text-light light:text-appBg-black text-[24px] font-bold">
+              Mode &amp; Theme
+            </h1>
+          </div>
+        </div>
+
+        <!-- Inject mode & theme using JS -->
+        <div id="mode-theme-parentEl"></div>
+      </div>
+    </template>
+
+    <!-- Fonts pannel -->
+    <template id="fonts-template">
+      <div id="fonts-wrapper" class="flex flex-col h-full py-6 md:px-4" data-menu="">
+        <!-- Back icon & title -->
+        <div class="flex flex-col space-y-6 mb-6 md:hidden">
+          <!-- Back arrow -->
+          <div data-action="return-to-settings" id="arrow-left-icon" class="cursor-pointer">
+            <svg class="w-6 h-6 text-light light:text-appBg-black">
+              <use xlink:href="#icon-arrow-left"></use>
+            </svg>
+          </div>
+
+          <!-- Title: Settings -->
+          <div class="flex">
+            <h1 class="text-light light:text-appBg-black text-[24px] font-bold">
+              Fonts
+            </h1>
+          </div>
+        </div>
+
+        <div id="font-options-container" class="flex flex-col space-y-2"></div>
+      </div>
+    </template>
+
+    <!-- Add holdings template -->
+    <template id="add-holdings-template">
+      <div id="add-holdings-panel-container" class="flex flex-col space-y-8 lg:space-y-10 bg-brand-body text-white light:bg-appBg-white light:text-textBase-textColor dark:bg-black dark:text-white md:bg-brand-body lg:bg-brand-body">
+        <!-- Add holdings nav bar wrapper -->
+        <div id="add-holdings-navbar-wrapper" class="flex flex-col space-y-8">
+          <!-- Return arrow -->
+          <div data-action="close-holdings-panel" id="arrow-left-icon" class="cursor-pointer">
+            <svg class="w-6 h-6 text-light light:text-appBg-black">
+              <use xlink:href="#icon-arrow-left"></use>
+            </svg>
+          </div>
+
+          <!-- Panel header -->
+          <div class="flex flex-col space-y-2">
+            <!-- title -->
+            <div class="flex text-xl font-bold lg:text-3xl">
+              Add Your Holdings
+            </div>
+
+            <!-- description -->
+            <p class="text-xs text-textBase-darkGray lg:text-base">
+              Track your crypto positions securly. No wallet connection required
+              - just enter your trade details
+            </p>
+          </div>
+        </div>
+
+        <!-- holdings container -->
+        <div class="flex flex-col bg-menuCard-glass light:bg-menuCard-menuLightBg shadow-md px-4 py-4 md:p-5 lg:p-10 rounded-md">
+          <form id="holding-form" class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-2 lg:gap-8">
+            <div class="col-span-1">
+              <!-- Consume the entire first grid col -->
+              <label for="" class="text-xs lg:text-base">Exchange Name</label>
+              <input type="text" class="col-span-2 holdings-input-style" placeholder="Enter exchange name (e.g. Binance, Bybit, KuCoin)" id="exchange-name" name="exchange-name">
+            </div>
+
+            <div class="col-span-1">
+              <!-- Consume the entire first grid col -->
+              <label for="" class="text-xs">Coin Name</label>
+              <input type="text" class="col-span-2 holdings-input-style" placeholder="Enter coin name or symbol (e.g. BTC, SOL)" id="coin-name" name="coin-name">
+            </div>
+
+            <div class="grid grid-cols-2 gap-8">
+              <div class="flex flex-col">
+                <label for="" class="text-xs">Buy Price (USDT)</label>
+                <input type="text" class="holdings-input-style" placeholder="e.g. 29,000" id="buy-price" name="buy-price">
+              </div>
+
+              <div class="flex flex-col">
+                <label for="" class="text-xs">Target Sell Price (USDT)</label>
+                <input type="text" class="holdings-input-style" placeholder="e.g. 29,000" id="sell-price" name="sell-price">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-8">
+              <div class="flex flex-col">
+                <label for="" class="text-xs">Amount Invested (USDT)</label>
+                <input type="text" class="holdings-input-style" placeholder="e.g. 100" id="amount-invested" name="amount-invested">
+              </div>
+
+              <div class="flex flex-col">
+                <label for="" class="text-xs">Quantity (auto)</label>
+                <input type="text" class="holdings-input-style focus:border-0" placeholder="auto generated" readonly="" id="quantity" name="quantity">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4">
+              <div>
+                <p class="text-sm font-bold underline decoration-dotted decoration-textBase-darkGray underline-offset-4">
+                  Optional Fields
+                </p>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4 pb-4">
+                <div class="flex flex-col">
+                  <label for="" class="text-xs">Stop Loss (USDT)</label>
+                  <input type="text" class="holdings-input-style" placeholder="e.g. 100" id="stop-loss" name="stop-loss">
+                </div>
+
+                <div class="flex flex-col">
+                  <label for="" class="text-xs">Take Profit (USDT)</label>
+                  <input type="text" class="holdings-input-style" placeholder="auto generated" id="" name="">
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-col space-y-2 md:pt-14 lg:pt-14">
+              <button class="text-sm font-bold bg-brand light:text-appBg-white md:w-1/2 rounded-md px-4 py-2 lg:w-1/2">
+                Save &amp; Track
+              </button>
+
+              <div>
+                <p class="text-xs text-textBase-darkGray">
+                  Once added, your holdings update automatically with live
+                  market data.
+                </p>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </template>
+  
+
+</body></html>
