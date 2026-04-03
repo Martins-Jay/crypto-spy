@@ -20,3 +20,4 @@ class HomePublisher {
 }
 
 export const homePublisher = new HomePublisher('body', 'home:btn-clicked');
+

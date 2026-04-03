@@ -17,15 +17,6 @@ class HoldingsPanelView {
     })
   }
 
-  // async loadHoldings() {
-  //    holdingsView.showSkeletons()
-
-  //    const holdings = await holdingModel.fetchHoldings(this.user.uid)
-  //    this.holdings = holdings;
-
-  //    holdingsView.loadCards(holdings)
-  // }
-
   toggleVisibility() {
     this.bottomNav = document.getElementById('bottom-nav');
     const panel = this.$('add-holdings-panel');

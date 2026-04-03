@@ -1,3 +1,5 @@
+import { publish } from '../../../helpers/pubsub.js';
+
 class BottomNavigation {
   constructor(containerId = 'bottom-navigation-container') {
     this.container = document.getElementById(containerId);
@@ -16,7 +18,7 @@ class BottomNavigation {
       <li>
         <button
           class="bottom-nav-btn flex flex-col items-center justify-center space-y-[1px]"
-          data-view="${itemObj.view}"
+          data-view="${itemObj.view}" data-action="open-${itemObj.view}"
         >
           <svg class="w-6 h-6">
             <use xlink:href="#${itemObj.iconId}" class="text-textBase-darkGray"></use>
@@ -25,6 +27,25 @@ class BottomNavigation {
         </button>
       </li>
     `;
+  }
+
+  setupEventDelegation() {
+    const bottomNavContainer = this.container;
+
+    bottomNavContainer.addEventListener('click', (e) => {
+      const targetEl = e.target.closest('[data-action]');
+      if (!targetEl) return;
+
+      const action = targetEl.dataset.action;
+      const view = targetEl.dataset.view;
+
+      console.log(action, view);
+
+      this.setActiveTab(targetEl);
+      this.switchView(view);
+
+      publish('navigation:changed', { view });
+    });
   }
 
   // Generate the full <ul> markup for the nav
@@ -55,19 +76,6 @@ class BottomNavigation {
     this.setupEventDelegation();
   }
 
-  setupEventDelegation() {
-    this.container?.addEventListener('click', (e) => {
-      const targetEl = e.target.closest('.bottom-nav-btn');
-      if (!targetEl) return;
-
-      const activeBottomNav = targetEl.dataset.view;
-
-      this.setActiveTab(targetEl);
-
-      this.switchView(activeBottomNav);
-    });
-  }
-
   setActiveTab(targetEl) {
     const buttonEls = this.container?.querySelectorAll('.bottom-nav-btn');
 
@@ -91,7 +99,6 @@ class BottomNavigation {
 
   switchView(activeBottomNav) {
     const sectionNameEls = document.querySelectorAll('.section-name');
-    console.log(sectionNameEls);
 
     sectionNameEls.forEach((sectionNameEl) => {
       if (sectionNameEl.id === activeBottomNav) {

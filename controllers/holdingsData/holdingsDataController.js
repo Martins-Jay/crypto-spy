@@ -15,16 +15,16 @@ class HoldingsDataController {
     try {
       const user = auth.currentUser;
 
-      // ---- Validate coin ----
+      // Validate coin
       if (!formData.coinSymbol || formData.coinSymbol.length < 2) {
         alert('Please enter a valid coin symbol like BTC or ETH.');
         return;
       }
 
-      // ---- Save to Firestore ----
+      // Save to Firestore
       await holdingModel.addHolding(user.uid, formData);
 
-      // ---- Feedback ----
+      // Feedback
       alert('Holding added successfully!');
 
       // Refresh the holdings view
@@ -38,11 +38,13 @@ class HoldingsDataController {
   async loadHoldings(userUid) {
     const holdings = await holdingModel.fetchHoldings(userUid);
 
+    console.log('FRESH DATA:', holdings);
+
     holdingsView.loadCards(holdings); // send data to the view
   }
 
   async handleHoldingsActions({ action, holdingId }) {
-    const user = await auth.currentUser;
+    const user = auth.currentUser;
 
     const actionMapObj = {
       'delete-holding': async () => {
@@ -54,21 +56,30 @@ class HoldingsDataController {
           await holdingModel.deleteHolding(user.uid, holdingId);
 
           const cardEl = document.querySelector(`[data-id="${holdingId}"]`);
-          if (cardEl) cardEl.remove();
 
           // Refresh holdings from Firestore
           await this.loadHoldings(user.uid);
         } catch (error) {}
       },
+
+      'open-holdings': async () => {
+        console.log('im here');
+        const user = auth.currentUser;
+        if (!user) return;
+
+        await this.loadHoldings(user.uid);
+      },
     };
 
     if (actionMapObj[action]) {
-      actionMapObj[action]();
+      await actionMapObj[action]();
     }
   }
 
   _initSubscriber() {
-    subscribe('Holdings:btn-clicked', this.handleHoldingsActions);
+    // activate listening
+    subscribe('Holdings:btn-clicked', this.handleHoldingsActions.bind(this));
+    subscribe('navigation:changed', this.handleHoldingsActions.bind(this));
   }
 
   init() {
